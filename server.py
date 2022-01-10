@@ -21,7 +21,6 @@ def upload():
     body = request.get_json()
     pil_image = Image.open(BytesIO(base64.b64decode(body["image"]))).convert('1').resize((200, 200))
     test_image = [ 255 if pixel else 0 for pixel in np.asarray(pil_image).flatten() ]
-    # save test image to disk
     pil_image.save("test.png")
     prediction = label_encoder.inverse_transform(classifier.predict([ test_image ]))
     return { "prediction": prediction[0] }

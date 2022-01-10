@@ -13,7 +13,7 @@ const [ prediction, refreshButton, penButton, fillButton, uploadButton ] = docum
 
 // canvas state
 const mouse = { x: 0, y: 0, down: false, tool: "pen" }
-const pixelSize = 20
+const pixelSize = 10
 let loading = false
 let image = []
 
@@ -22,10 +22,10 @@ const updateMousePosition = (e, mouseDown) => {
     if(mouseDown) { mouse.down = true }
 
     const rect = canvas.getBoundingClientRect()
-    mouse.x = e.clientX - rect.left
-    mouse.y = e.clientY - rect.top
-    // mouse.x = Math.floor((e.clientX - rect.left) / pixelSize) * pixelSize
-    // mouse.y = Math.floor((e.clientY - rect.top) / pixelSize) * pixelSize
+    // mouse.x = e.clientX - rect.left
+    // mouse.y = e.clientY - rect.top
+    mouse.x = Math.floor((e.clientX - rect.left) / pixelSize) * pixelSize
+    mouse.y = Math.floor((e.clientY - rect.top) / pixelSize) * pixelSize
 }
 
 // add canvas event listeners
@@ -76,6 +76,12 @@ const render = () => {
     ctx.fillStyle = "#fff"
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
+    // draw a circle
+    // ctx.beginPath()
+    // ctx.arc(canvas.width / 2, canvas.height / 2, 150, 0, 2 * Math.PI)
+    // ctx.fillStyle = "#eee"
+    // ctx.fill()
+
     // draw image
     for(const pixel of image) {
         ctx.fillStyle = "#000"
@@ -92,6 +98,8 @@ const render = () => {
             }
             case "fill": {
                 mouse.down = false
+                mouse.tool = "pen"
+
                 const fill = { x: mouse.x, y: mouse.y }
                 const queue = [fill]
 
@@ -118,6 +126,7 @@ const render = () => {
         }
     }
 
+    
 
     window.requestAnimationFrame(render)
 }
