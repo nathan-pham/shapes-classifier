@@ -34,7 +34,29 @@ const ctx = canvas.getContext("2d")
 canvas.width = canvas.offsetWidth
 canvas.height = canvas.offsetHeight
 
-canvas.addEventListener("mousedown", e => { updateMousePosition(e, true) })
+canvas.addEventListener("mousedown", e => { 
+    updateMousePosition(e, true) 
+
+    if(mouse.tool == "fill") {
+        const fill = { x: mouse.x, y: mouse.y }
+        const queue = [fill]
+
+
+        let maxLoop = 7000
+
+        while(queue.length > 0 && maxLoop > 0) {
+            const pixel = queue.shift()
+            if(!image.find(p => p.x === pixel.x && p.y === pixel.y)) {
+                image.push(pixel)
+                queue.push({ x: pixel.x - pixelSize, y: pixel.y })
+                queue.push({ x: pixel.x + pixelSize, y: pixel.y })
+                queue.push({ x: pixel.x, y: pixel.y - pixelSize })
+                queue.push({ x: pixel.x, y: pixel.y + pixelSize })
+            }   
+            maxLoop--
+        }
+    }
+})
 canvas.addEventListener("mousemove", e => { updateMousePosition(e) })
 canvas.addEventListener("mouseup", e => { mouse.down = false })
 
@@ -93,34 +115,6 @@ const render = () => {
             case "pen": {
                 const pixel = { x: mouse.x, y: mouse.y }
                 if(!image.find(p => p.x === pixel.x && p.y === pixel.y)) { image.push(pixel) }
-               
-                break
-            }
-            case "fill": {
-                mouse.down = false
-                mouse.tool = "pen"
-
-                const fill = { x: mouse.x, y: mouse.y }
-                const queue = [fill]
-
-                let forceQuit = false
-
-                setTimeout(() => {
-                    forceQuit = true
-                    console.log("force quit loop")
-                }, 500)
-
-                while(queue.length > 0 || forceQuit) {
-                    const pixel = queue.shift()
-                    if(!image.find(p => p.x === pixel.x && p.y === pixel.y)) {
-                        image.push(pixel)
-                        queue.push({ x: pixel.x - pixelSize, y: pixel.y })
-                        queue.push({ x: pixel.x + pixelSize, y: pixel.y })
-                        queue.push({ x: pixel.x, y: pixel.y - pixelSize })
-                        queue.push({ x: pixel.x, y: pixel.y + pixelSize })
-                    }   
-                }
-
                 break
             }
         }
