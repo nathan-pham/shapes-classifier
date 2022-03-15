@@ -2,7 +2,7 @@
 
 # Shapes Classifier
 Use RandomForestClassifier to classify 4 different shapes: a square, star, circle, and triangle.  
-Dataset: https://www.kaggle.com/smeschke/four-shapes
+Dataset: https://www.kaggle.com/smeschke/four-shapes  
 Article on Dev.to: https://dev.to/phamn23/shapes-classifier-sklearn-tutorial-but-scuffed-2obf
 
 ## Screenshots
